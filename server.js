@@ -14,9 +14,13 @@ var db = require ("./models");
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static("public"));
+app.use(methodOverride("_method"));
+app.use(bodyParser.urlencoded({extended: false}));
+app.engine("handlebars", exphbs({defaultLayout: "main"}));
+app.set("view engine", "handlebars");
 
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/week18Populater", {
+mongoose.connect("mongodb://localhost/scrapedNews", {
   useMongoClient: true
 });
 
@@ -28,6 +32,11 @@ app.get("/scrape", function(req,rex) {
 
     $("h4.headline-link").each(function(i, element) {
 
-        var title = $(element).text();
+        result.title = $(this)
+          .children("a")
+          .text();
+        result.link = $(this)
+            .children("a")
+            .attr("href");
   })
 })
